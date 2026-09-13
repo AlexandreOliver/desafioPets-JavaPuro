@@ -17,18 +17,18 @@ public record PetInputDTO
     )
 {
   public PetInputDTO {
-    nome = (nome == null || nome.isBlank()) ? Pet.NoData : nome.toLowerCase().trim();
-    raca = (raca == null || raca.isBlank()) ? Pet.NoData : raca.toLowerCase().trim();
-    idade = (idade == null || idade.isBlank()) ? Pet.NoData : idade.replace(",", ".").toLowerCase().trim();
-    peso = (peso == null || peso.isBlank()) ? Pet.NoData : peso.replace(",", ".").toLowerCase().trim();
+    nome = (nome == null || nome.isBlank()) ? Pet.NoData : nome.trim();
+    raca = (raca == null || raca.isBlank()) ? Pet.NoData : raca.trim();
+    idade = (idade == null || idade.isBlank()) ? Pet.NoData : idade.replace(",", ".").trim();
+    peso = (peso == null || peso.isBlank()) ? Pet.NoData : peso.replace(",", ".").trim();
 
-    if (!nome.equals((Pet.NoData))) verifyNome(nome);
+    if (!nome.equals((Pet.NoData))) verifyNome(nome.toLowerCase());
 
-    if (!idade.equals((Pet.NoData))) verifyIdade(idade);
+    if (!idade.equals((Pet.NoData))) verifyIdade(idade.toLowerCase());
 
-    if (!raca.equals(Pet.NoData)) verifyRaca(raca);
+    if (!raca.equals(Pet.NoData)) verifyRaca(raca.toLowerCase());
 
-    if (!peso.equals((Pet.NoData))) verifyPeso(peso);
+    if (!peso.equals((Pet.NoData))) verifyPeso(peso.toLowerCase());
   }
 
   private static void verifyOnlyLetters(String value) {
@@ -76,7 +76,7 @@ public record PetInputDTO
         throw new IllegalArgumentException("Forneça um valor valido para o peso. Exemplo: '2kg', '2.4kg', '600g', '200g'");
       }
 
-      verifyOnlyNumbers(peso.split(" ")[0]);
+      verifyOnlyNumbers(peso.replaceAll("[ kg]", ""));
 
     } catch (IllegalArgumentException ex) {
       throw new IllegalArgumentException("Peso incorreto: " + ex.getMessage());

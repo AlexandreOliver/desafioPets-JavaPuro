@@ -5,7 +5,7 @@ import java.util.Objects;
 
 public enum PetGender {
   MALE("Macho"),
-  FEMALE("Fêmea");
+  FEMALE("Femea");
 
   private final String label;
 

@@ -1,5 +1,8 @@
 import DTOs.PetInputDTO;
 import core.*;
+import repository.PetFileRepository;
+import core.PetRepository;
+import service.PetService;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -8,37 +11,24 @@ import java.util.*;
 public class CadastroApplication {
 
   private final static File formularioSource = new File("src/resources/formulario.txt");
+  private final static String storagePath = "src/petsCadastrados";
   private final static Scanner terminalScanner = new Scanner(System.in);
-  private static MenuOptions optionSelect;
 
   public static void main(String[] args) {
 
-    menu();
+    PetRepository repository = new PetFileRepository(storagePath);
+    PetService petService = new PetService(repository);
 
-    switch (optionSelect) {
-      case op1: {
-        PetInputDTO input =  getDataInput();
-
-        Pet newPet = new Pet(
-            input.nome(),
-            input.tipo(),
-            input.genero(),
-            input.endereco(),
-            input.idade(),
-            input.peso(),
-            input.raca());
-      };
-      case op2: {};
-      case op3: {};
-      case op4: {};
-      case op5: {};
-      case op6: {};
+    switch (menu()) {
+      case op1 -> petService.save(getDataInput());
     }
 
     cleanup();
   }
 
-  public static void menu() {
+  public static MenuOptions menu() {
+
+    MenuOptions optionSelected;
 
     while (true) {
       menuPrint();
@@ -47,7 +37,7 @@ public class CadastroApplication {
       try {
         int indexSelect = Integer.parseInt(terminalScanner.next());
 
-        optionSelect = MenuOptions.optionOf(indexSelect);
+        optionSelected = MenuOptions.optionOf(indexSelect);
 
         terminalScanner.nextLine();
         break;
@@ -56,6 +46,8 @@ public class CadastroApplication {
         System.out.println("Forneça um valor dentro das opções\n\n");
       }
     }
+
+    return optionSelected;
   }
 
   public static void menuPrint() {

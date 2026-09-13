@@ -1,6 +1,8 @@
 package core;
 
 import java.util.Formatter;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Pet {
   private String nome;
@@ -12,6 +14,7 @@ public class Pet {
   private String raca;
 
   public static final String NoData = "NÃO INFORMADO";
+  public static final Pattern pesoFormato = Pattern.compile("\\b([0-9]+(?:[.,][0-9]+)?)(kg|g)\\b");
 
   public Pet(String nome, PetType tipo,
              PetGender genero, PetAddress endereco,
@@ -29,10 +32,16 @@ public class Pet {
   }
 
   public static void verifyPeso(String value) {
-    String[] splitted = value.split(" ");
+    Matcher m = pesoFormato.matcher(value);
 
-    double number = Double.parseDouble(splitted[0]);
-    String unid = splitted[1];
+    double number = 0;
+    String unid = "";
+
+    if (m.find()) {
+      number = Double.parseDouble(m.group(1));
+      unid = m.group(2);
+    }
+
 
     if (unid.equals("g") || unid.equals("gramas")) {
       if (number/1000 > 60 || number/1000 < 0.5)
@@ -52,4 +61,32 @@ public class Pet {
     return new Formatter().format("%.2f anos", result).toString();
   }
 
+
+  public String getNome() {
+    return nome;
+  }
+
+  public PetType getTipo() {
+    return tipo;
+  }
+
+  public PetGender getGenero() {
+    return genero;
+  }
+
+  public PetAddress getEndereco() {
+    return endereco;
+  }
+
+  public String getIdade() {
+    return idade;
+  }
+
+  public String getPeso() {
+    return peso;
+  }
+
+  public String getRaca() {
+    return raca;
+  }
 }

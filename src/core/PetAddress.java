@@ -28,4 +28,9 @@ public class PetAddress {
 
     return new PetAddress(cidade, rua);
   }
+
+  @Override
+  public String toString() {
+    return this.rua + ", " + this.numero + ", " + this.cidade;
+  }
 }
